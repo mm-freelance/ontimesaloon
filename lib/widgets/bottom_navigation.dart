@@ -67,7 +67,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month_rounded , size: 26),
             
-            label: 'Booking',
+            label: 'Appointing',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.message_rounded , size: 26),

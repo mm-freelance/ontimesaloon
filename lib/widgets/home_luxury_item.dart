@@ -47,6 +47,7 @@ class LuxurySection extends StatelessWidget {
                       child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           shrinkWrap: true,
+                          primary: false,
                           itemCount: luxuryListItem.length,
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {

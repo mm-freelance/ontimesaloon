@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:salon/features/booking_features/service_booking_page.dart';
+
 import 'package:salon/features/home_page.dart';
 import 'package:salon/utils/colors.dart';
 import 'package:salon/widgets/home_items_list.dart';
+
 class SalonViewAllPage extends StatelessWidget {
   const SalonViewAllPage({super.key});
 
@@ -180,21 +183,19 @@ class SalonViewAllPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: SizedBox(
-                              
                               child: Column(
                                 children: [
-                                 const  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text(
+                                      Text(
                                         'Select a Salon',
                                         style: TextStyle(
                                             color: AppColors.appbackgroundColor,
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      
                                     ],
                                   ),
                                   const SizedBox(
@@ -362,6 +363,17 @@ class SalonViewAllPage extends StatelessWidget {
                                                             ],
                                                           ),
                                                           InkWell(
+                                                            onTap: () {
+                                                              Navigator
+                                                                  .push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          const BookingServicePage(),
+                                                                ),
+                                                              );
+                                                            },
                                                             child: Container(
                                                               // // padding: const EdgeInsets.all(32),
                                                               // margin: const EdgeInsets.symmetric(horizontal: 30),

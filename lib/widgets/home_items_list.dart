@@ -98,3 +98,77 @@ List<LuxuryModel> luxuryListItem = [
   LuxuryModel('assets/image3.png', 'CHEAP&BEST', 'Koyembedu',
       '9:00 am - 6:00 pm', '18Km'),
 ];
+
+
+
+//  bottom bar serivice title list 
+
+
+class ServiceBarModel {
+  
+  final String title;
+ 
+ ServiceBarModel(
+       this.title);
+}
+
+List<ServiceBarModel> serviceTitleListItem = [
+  ServiceBarModel('Hair Cut'),
+  ServiceBarModel('Hair Style'),
+  ServiceBarModel('Shaving'),
+  ServiceBarModel('Hair Washing'),
+  ServiceBarModel('Spa'),
+  ServiceBarModel('Facial'),
+  ServiceBarModel('Hair Dryer'),
+  ServiceBarModel('Nail Art'),
+  ServiceBarModel('Makeup'),
+  ServiceBarModel('Hair Coloring'),
+  
+     
+  
+];
+
+// filter home
+
+class Product {
+  final String name;
+  final String category;
+  final double price;
+
+  Product({
+    required this.name,
+    required this.category,
+    required this.price,
+});
+}
+
+ // add address form details save to address page: address model
+
+ 
+  
+
+
+
+class AddressModel {
+  final String fullName;
+  final String streeAddress;
+  final String city;
+  final String state;
+  
+  final String postalCode;
+
+  AddressModel(this.fullName,
+      this.streeAddress,
+      this.city,
+      this.state,
+      
+      this.postalCode);
+}
+
+List<AddressModel> addressListItem = [
+  AddressModel('Kesav', '12/82, Mugapair west', 'Thirumangalam', 'Chennai','620003'),
+  AddressModel('Easwar', '12/82, Mugapair west', 'Thirumangalam', 'Chennai','620005'),
+  AddressModel('Ragav', '12/82, Mugapair west', 'Thirumangalam', 'Chennai','620002'),
+  AddressModel('Chandry', '12/82, Mugapair west', 'Thirumangalam', 'Chennai','620001'),
+  
+];

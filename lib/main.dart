@@ -1,8 +1,11 @@
-
 import 'package:flutter/material.dart';
+import 'package:salon/features/book_mark.dart';
+
 
 import 'package:salon/utils/colors.dart';
-import 'package:salon/widgets/bottom_navigation.dart';
+
+
+
 
 
 void main() {
@@ -18,9 +21,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Saloon app',
       theme: ThemeData(
+        drawerTheme: const DrawerThemeData(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
         scaffoldBackgroundColor: AppColors.appbackgroundColor,
       ),
-      home:const  BottomNavigationPage(),
+      home:const BookMarkPage()
     );
   }
 }

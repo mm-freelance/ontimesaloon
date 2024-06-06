@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
 
+import 'package:salon/features/menu_drawer.dart';
 import 'package:salon/utils/colors.dart';
-import 'package:salon/widgets/home_barbar_item.dart';
 
+import 'package:salon/widgets/home_barbar_item.dart';
 import 'package:salon/widgets/home_luxury_item.dart';
 import 'package:salon/widgets/home_recommended_item.dart';
 import 'package:salon/widgets/home_salon_items.dart';
 import 'package:salon/widgets/home_service_items.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey1 = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey2 = GlobalKey<ScaffoldState>();
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey1,
+      drawer: const MenuNavBar(),
+
+      // endDrawer: Drawer(
+      //    key: _scaffoldKey2,
+      //   child: const FilterNavBar() ,
+      // ),
+
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
@@ -42,30 +58,50 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                                height: 36,
-                                width: 36,
-                                decoration: const BoxDecoration(
-                                    color: Colors.black54,
-                                    borderRadius: BorderRadiusDirectional.all(
-                                        Radius.circular(50))),
-                                child: const Icon(
-                                  Icons.menu_rounded,
-                                  size: 26,
-                                  color: Colors.white,
-                                )),
-                            Container(
-                                height: 36,
-                                width: 36,
-                                decoration: const BoxDecoration(
-                                    color: Colors.black54,
-                                    borderRadius: BorderRadiusDirectional.all(
-                                        Radius.circular(50))),
-                                child: const Icon(
-                                  Icons.filter_list_alt,
-                                  size: 26,
-                                  color: Colors.white,
-                                )),
+                            GestureDetector(
+                              onTap: () {
+                                // Open the drawer
+                                _scaffoldKey1.currentState?.openDrawer();
+                              },
+                              child: Container(
+                                  height: 36,
+                                  width: 36,
+                                  decoration: const BoxDecoration(
+                                      color: Colors.black54,
+                                      borderRadius: BorderRadiusDirectional.all(
+                                          Radius.circular(50))),
+                                  child: const Icon(
+                                    Icons.menu_rounded,
+                                    size: 26,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            GestureDetector(
+                              // onTap: () {
+                              //   showModalBottomSheet(
+                                  
+                              //       context: context,
+                              //       builder: (BuildContext context) {
+                              //         return const FilerBottomSheet();
+                              //       });
+                              // },
+                              //  onTap: () {
+                              //   // Open the drawer
+                              //   _scaffoldKey2.currentState?.openEndDrawer();
+                              // },
+                              child: Container(
+                                  height: 36,
+                                  width: 36,
+                                  decoration: const BoxDecoration(
+                                      color: Colors.black54,
+                                      borderRadius: BorderRadiusDirectional.all(
+                                          Radius.circular(50))),
+                                  child: const Icon(
+                                    Icons.filter_list_alt,
+                                    size: 26,
+                                    color: Colors.white,
+                                  )),
+                            ),
                           ],
                         ),
                       ),
