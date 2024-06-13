@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:salon/features/book_mark.dart';
+import 'package:salon/pages_usermanagement/signup_page.dart';
+import 'package:salon/pages_usermanagement/splash_screen.dart';
 
 
 import 'package:salon/utils/colors.dart';
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
         scaffoldBackgroundColor: AppColors.appbackgroundColor,
       ),
-      home:const BookMarkPage()
+      home:const SplashScreen()
     );
   }
 }

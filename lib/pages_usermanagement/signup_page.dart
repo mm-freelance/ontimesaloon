@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:custom_clippers/custom_clippers.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:salon/pages_usermanagement/otp_page.dart';
 import 'package:salon/pages_usermanagement/login_page.dart';
+import 'package:salon/utils/api.dart';
 import 'package:salon/utils/colors.dart';
+import 'package:http/http.dart' as http;
+import 'package:salon/utils/shared_prefrences_helper.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -17,7 +22,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   String? validateEmail(String? email) {
     RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
@@ -33,6 +39,8 @@ class _SignUpPageState extends State<SignUpPage> {
   bool obsecuretxt = true;
   bool confrimobsecuretxt = true;
   bool isChecked = false;
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final inputBorder = OutlineInputBorder(
@@ -104,10 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         TextFormField(
                           controller: _nameController,
                           decoration: InputDecoration(
-                             errorBorder:const OutlineInputBorder(
-                                    
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
+                            errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
                             hintText: 'Enter mail Id',
@@ -138,10 +144,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         TextFormField(
                           controller: _passwordController,
                           decoration: InputDecoration(
-                            errorBorder:const OutlineInputBorder(
-                                    
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
+                            errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
                             suffixIcon: GestureDetector(
                               child: obsecuretxt
                                   ? const Icon(
@@ -196,10 +200,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         TextFormField(
                           controller: _confirmPasswordController,
                           decoration: InputDecoration(
-                            errorBorder:const OutlineInputBorder(
-                                    
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
+                            errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
                             suffixIcon: GestureDetector(
                               child: confrimobsecuretxt
                                   ? const Icon(
@@ -277,37 +279,40 @@ class _SignUpPageState extends State<SignUpPage> {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        InkWell(
-                          onTap: () {
-                            if (_formkey.currentState!.validate()) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AskMobileNumberPage(),
+                        isLoading
+                            ? CircularProgressIndicator()
+                            : InkWell(
+                                onTap: () {
+                                  if (_formkey.currentState!.validate()) {
+                                    signUp(_nameController.text, _passwordController.text, _confirmPasswordController.text);
+                                    // Navigator.pushReplacement(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         const AskMobileNumberPage(),
+                                    //   ),
+                                    // );
+                                  }
+                                },
+                                child: Container(
+                                  // // padding: const EdgeInsets.all(32),
+                                  // margin: const EdgeInsets.symmetric(horizontal: 30),
+                                  height: 50,
+                                  width: double.infinity,
+                                  decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5))),
+                                  child: const Center(
+                                      child: Text(
+                                    'SIGN UP',
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 11, 70),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  )),
                                 ),
-                              );
-                            }
-                          },
-                          child: Container(
-                            // // padding: const EdgeInsets.all(32),
-                            // margin: const EdgeInsets.symmetric(horizontal: 30),
-                            height: 50,
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
-                            child: const Center(
-                                child: Text(
-                              'SIGN UP',
-                              style: TextStyle(
-                                  color:  Color.fromARGB(255, 0, 11, 70),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
-                            )),
-                          ),
-                        ),
+                              ),
                         const SizedBox(height: 30),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -349,5 +354,58 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> signUp(String email, String pass, String confirmpass) async {
+    setState(() {
+      isLoading = true; // Add this line
+    });
+    print('Sign Up Function Called');
+    print("$email ::: $pass :::: $confirmpass");
+    final String apiUrl = '${API.signINAPI}';
+    try {
+      var map = Map<String, dynamic>();
+      map['email'] = email;
+      map['password'] = pass;
+      map['cnfpassword'] = confirmpass;
+      var res = await http.post(
+        Uri.parse(apiUrl),
+        body: map,
+      );
+      print("Data sent");
+      if (res.statusCode == 200) {
+        print(res.statusCode);
+        await SharedPrefs.saveEmail(email);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AskMobileNumberPage(),
+          ),
+        );
+        print('Success: ${res.body}');
+      } else if (res.statusCode == 400) {
+        print('Client Error: ${res.body}');
+      } else {
+        print('Server Error: ${res.statusCode}');
+      }
+      if (jsonDecode(res.body)['status'] == 'success') {
+        await SharedPrefs.saveEmail(email);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AskMobileNumberPage(),
+          ),
+        );
+      }
+      return res;
+    } catch (e, stackTrace) {
+      print('Error: $e');
+      print('StackTrace: $stackTrace');
+      return null;
+    } finally {
+      setState(() {
+        isLoading = false; // Add this line
+      });
+    }
   }
 }
