@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:salon/pages_usermanagement/otp_verification.dart';
+import 'package:salon/utils/api.dart';
 import 'package:salon/utils/colors.dart';
 import 'package:salon/utils/shared_prefrences_helper.dart';
 import 'package:http/http.dart' as http;
@@ -137,7 +138,7 @@ class _AskMobileNumberPageState extends State<AskMobileNumberPage> {
                 ),
                 const SizedBox(height: 40),
                 isLoading
-                    ? CircularProgressIndicator()
+                    ? Center(child: CircularProgressIndicator())
                     : InkWell(
                         onTap: () {
                           mobileNo(context, controller.text);
@@ -188,12 +189,13 @@ class _AskMobileNumberPageState extends State<AskMobileNumberPage> {
     }
 
     print("$email ::: $number ");
-    final String apiUrl = 'https://ontimesalon.com/api/User_Numberupdate.php';
+    final String apiUrl = '${API.mobileno}';
 
     try {
       var map = Map<String, dynamic>();
-      map['email'] = email;
-      map['number'] = number;
+      map['number'] = number.toString();
+      map['email'] = email.toString();
+
 
       var res = await http.post(
         Uri.parse(apiUrl),
@@ -203,7 +205,17 @@ class _AskMobileNumberPageState extends State<AskMobileNumberPage> {
       print("Data sent");
       if (res.statusCode == 200) {
         print('Success: ${res.body}');
-      } else if (res.statusCode == 400) {
+      } else if (res.statusCode == 404) {
+
+        //got an errr : 404
+
+        await SharedPrefs.saveNumber(number);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const OTPVerificationPage(),
+          ),
+        );
         print('Client Error: ${res.body}');
       } else {
         print('Server Error: ${res.statusCode}');

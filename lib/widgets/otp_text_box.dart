@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class OtpBox extends StatefulWidget {
-  const OtpBox({super.key});
+   void Function(String) onOtpChanged;
+
+   OtpBox({Key? key, required this.onOtpChanged}) : super(key: key);
 
   @override
   State<OtpBox> createState() => _OtpBoxState();
 }
 
 class _OtpBoxState extends State<OtpBox> {
-   final TextEditingController controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +34,20 @@ class _OtpBoxState extends State<OtpBox> {
           ),
         ),
         onChanged: (value) {
+          if (widget.onOtpChanged != null) {
+            widget.onOtpChanged!(value); // Pass the OTP value to the callback
+          }
           if (value.length == 1) {
             FocusScope.of(context).nextFocus();
+          } else {
+            FocusScope.of(context).previousFocus();
           }
         },
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         inputFormatters: [
-          LengthLimitingTextInputFormatter(1),
           FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(1),
         ],
         style: const TextStyle(
             fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),

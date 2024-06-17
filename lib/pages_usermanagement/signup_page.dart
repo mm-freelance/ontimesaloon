@@ -327,7 +327,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             const SizedBox(width: 4),
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => const LoginPage(),
@@ -362,7 +362,7 @@ class _SignUpPageState extends State<SignUpPage> {
     });
     print('Sign Up Function Called');
     print("$email ::: $pass :::: $confirmpass");
-    final String apiUrl = '${API.signINAPI}';
+    final String apiUrl = '${API.signUPAPI}';
     try {
       var map = Map<String, dynamic>();
       map['email'] = email;

@@ -69,10 +69,10 @@ class _ForegetOTPPageState extends State<ForegetOTPPage> {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        OtpBox(),
-                        OtpBox(),
-                        OtpBox(),
-                        OtpBox(),
+                        // OtpBox(),
+                        // OtpBox(),
+                        // OtpBox(),
+                        // OtpBox(),
                       ],
                     ),
                   ),

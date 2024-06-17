@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:custom_clippers/custom_clippers.dart';
 
 import 'package:flutter/material.dart';
@@ -5,10 +7,11 @@ import 'package:salon/features/home_page.dart';
 
 import 'package:salon/pages_usermanagement/forget_password_page.dart';
 
-
 import 'package:salon/pages_usermanagement/signup_page.dart';
-
+import 'package:salon/utils/api.dart';
+import 'package:http/http.dart' as http;
 import 'package:salon/utils/colors.dart';
+import 'package:salon/utils/shared_prefrences_helper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
 
   String? validateEmail(String? email) {
     RegExp emailRegex = RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
@@ -36,8 +38,10 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController confirmpass = TextEditingController();
   bool obsecuretxt = true;
- 
+
   bool isChecked = false;
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final inputBorder = OutlineInputBorder(
@@ -109,10 +113,8 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           controller: _nameController,
                           decoration: InputDecoration(
-                             errorBorder:const OutlineInputBorder(
-                                    
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
+                            errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
                             hintText: 'Enter mail Id',
@@ -143,10 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           controller: _passwordController,
                           decoration: InputDecoration(
-                            errorBorder:const OutlineInputBorder(
-                                    
-                                      borderSide:
-                                          BorderSide(color: Colors.white)),
+                            errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
                             suffixIcon: GestureDetector(
                               child: obsecuretxt
                                   ? const Icon(
@@ -184,32 +184,33 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                         ),
-                        
-                        
-                        
                         const SizedBox(height: 12),
-                        
-                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                            children: [GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const  ForgetPasswordPage(),),);
-                              },
-                              child: const Text('Forget your password',style:  TextStyle(
-                                      fontSize: 14, color: Colors.white), ),
-                            ),]
-                          ),
-                        
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ForgetPasswordPage(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Forget your password',
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.white),
+                                ),
+                              ),
+                            ]),
                         const SizedBox(height: 25),
                         InkWell(
                           onTap: () {
                             if (_formkey.currentState!.validate()) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const HomePage(),
-                                ),
+                              login(
+                                _nameController.text,
+                                _passwordController.text,
                               );
                             }
                           },
@@ -226,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text(
                               'SIGN IN',
                               style: TextStyle(
-                                  color:  Color.fromARGB(255, 0, 11, 70),
+                                  color: Color.fromARGB(255, 0, 11, 70),
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600),
                             )),
@@ -273,5 +274,57 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> login(String email, String pass) async {
+    setState(() {
+      isLoading = true; // Add this line
+    });
+    print('Sign Up Function Called');
+    print("$email ::: $pass :::: ");
+    final String apiUrl = '${API.signINAPI}';
+    try {
+      var map = Map<String, dynamic>();
+      map['email'] = email;
+      map['password'] = pass;
+      var res = await http.post(
+        Uri.parse(apiUrl),
+        body: map,
+      );
+      print("Data sent");
+      if (res.statusCode == 200) {
+        print(res.statusCode);
+        await SharedPrefs.saveEmail(email);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+        );
+        print('Success: ${res.body}');
+      } else if (res.statusCode == 400) {
+        print('Client Error: ${res.body}');
+      } else {
+        print('Server Error: ${res.statusCode}');
+      }
+      if (jsonDecode(res.body)['status'] == 'success') {
+        await SharedPrefs.saveEmail(email);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+        );
+      }
+      return res;
+    } catch (e, stackTrace) {
+      print('Error: $e');
+      print('StackTrace: $stackTrace');
+      return null;
+    } finally {
+      setState(() {
+        isLoading = false; // Add this line
+      });
+    }
   }
 }

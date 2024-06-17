@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.appbackgroundColor,
       ),
       home:const SplashScreen()
+      // home: const BookMarkPage(),
     );
   }
 }

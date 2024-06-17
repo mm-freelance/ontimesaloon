@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:custom_clippers/custom_clippers.dart';
+import 'package:salon/features/home_page.dart';
 import 'package:salon/pages_usermanagement/signup_page.dart';
 
 import 'package:salon/utils/colors.dart';
+import 'package:salon/utils/shared_prefrences_helper.dart';
 import 'package:salon/widgets/onboarding_items.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -21,12 +23,27 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final int _totalPages = 3;
 
   @override
+  void initState(){
+    super.initState();
+    _checkEmail();
+  }
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
   }
 
-  
+  Future<void> _checkEmail() async {
+
+    String? email = await SharedPrefs.getEmailValue();
+    if (email != null) {
+      // Navigate to HomePage if email is found
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    }
+  }
 
   void _onButtonPressed() {
     if (_currentPage == _totalPages - 1) {
@@ -141,6 +158,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       ),
     );
   }
+
+
 }
 
 Widget dotIndicator({required bool isSelected}) {

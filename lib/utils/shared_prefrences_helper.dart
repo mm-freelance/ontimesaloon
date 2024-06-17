@@ -26,4 +26,9 @@ class SharedPrefs {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(numberValue);
   }
+
+  static Future<void> clearData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
 }
