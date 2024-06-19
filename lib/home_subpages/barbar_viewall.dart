@@ -213,8 +213,12 @@ class BarbarViewAllPage extends StatelessWidget {
                                         itemBuilder: (context, index) {
                                           return Container(
                                             width: 120,
-                                            decoration: BoxDecoration( borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.grey.shade200)),
-                                            
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                    color:
+                                                        Colors.grey.shade200)),
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 20),
                                             child: Column(

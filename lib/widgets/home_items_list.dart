@@ -1,5 +1,6 @@
 // barbar list
 
+import 'dart:convert';
 
 class BarbarModel {
   final String imageUrl;
@@ -30,20 +31,47 @@ List<BarbarModel> barbarListItem = [
 //salon list
 
 class SalonModel {
-  final String imageUrl;
-  final String title;
+  final String saloonid;
+  final String name;
+  final String email;
+  final String phone;
+  final String address;
 
-  SalonModel(this.imageUrl, this.title);
+  // final String imageUrl;
+  // final String title;
+
+  // SalonModel(this.imageUrl, this.title);
+  SalonModel({required this.saloonid, required this.name, required this.email, required this.phone, required this.address});
+
+  factory SalonModel.fromJson(Map<String, dynamic> json) {
+    return SalonModel(
+      saloonid : json['saloonid'],
+      name: json['name'],
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
+      address: json['address'] ?? '',
+    );
+  }
+}
+List<SalonModel> parseSalons(String responseData) {
+  try {
+    final parsed = jsonDecode(responseData);
+    final salonList = parsed['data']['Salon_Name'] as List;
+    return salonList.map<SalonModel>((json) => SalonModel.fromJson(json)).toList();
+  } catch (e) {
+    print('Error parsing JSON: $e');
+    return [];
+  }
 }
 
 List<SalonModel> salonListItem = [
-  SalonModel('assets/image1.png', 'Salon1'),
-  SalonModel('assets/image2.png', 'Salon2'),
-  SalonModel('assets/image3.png', 'Salon3'),
-  SalonModel('assets/image4.png', 'Salon4'),
-  SalonModel('assets/image5.png', 'Salon5'),
-  SalonModel('assets/image6.png', 'Salon6'),
-  SalonModel('assets/image7.png', 'Salon7'),
+  // SalonModel('assets/image1.png', 'Salon1'),
+  // SalonModel('assets/image2.png', 'Salon2'),
+  // SalonModel('assets/image3.png', 'Salon3'),
+  // SalonModel('assets/image4.png', 'Salon4'),
+  // SalonModel('assets/image5.png', 'Salon5'),
+  // SalonModel('assets/image6.png', 'Salon6'),
+  // SalonModel('assets/image7.png', 'Salon7'),
 ];
 
 // service list
@@ -53,6 +81,8 @@ class ServiceModel {
   final String title;
 
   ServiceModel(this.imageUrl, this.title);
+
+
 }
 
 List<ServiceModel> serviceListItem = [
@@ -91,7 +121,7 @@ List<LuxuryModel> luxuryListItem = [
       '10:00 am - 9:00 pm', '16Km'),
   LuxuryModel('assets/image3.png', 'CHEAP&BEST', 'Koyembedu',
       '9:00 am - 6:00 pm', '18Km'),
-      LuxuryModel('assets/image1.png', 'NATURALS', 'Anna Nagar',
+  LuxuryModel('assets/image1.png', 'NATURALS', 'Anna Nagar',
       '9:00 am - 9:00 pm', '10Km'),
   LuxuryModel('assets/image2.png', 'TONI&GUY', 'Koyembedu',
       '10:00 am - 9:00 pm', '16Km'),
@@ -99,17 +129,12 @@ List<LuxuryModel> luxuryListItem = [
       '9:00 am - 6:00 pm', '18Km'),
 ];
 
-
-
-//  bottom bar serivice title list 
-
+//  bottom bar serivice title list
 
 class ServiceBarModel {
-  
   final String title;
- 
- ServiceBarModel(
-       this.title);
+
+  ServiceBarModel(this.title);
 }
 
 List<ServiceBarModel> serviceTitleListItem = [
@@ -123,9 +148,6 @@ List<ServiceBarModel> serviceTitleListItem = [
   ServiceBarModel('Nail Art'),
   ServiceBarModel('Makeup'),
   ServiceBarModel('Hair Coloring'),
-  
-     
-  
 ];
 
 // filter home
@@ -139,36 +161,30 @@ class Product {
     required this.name,
     required this.category,
     required this.price,
-});
+  });
 }
 
- // add address form details save to address page: address model
-
- 
-  
-
-
+// add address form details save to address page: address model
 
 class AddressModel {
   final String fullName;
   final String streeAddress;
   final String city;
   final String state;
-  
+
   final String postalCode;
 
-  AddressModel(this.fullName,
-      this.streeAddress,
-      this.city,
-      this.state,
-      
-      this.postalCode);
+  AddressModel(
+      this.fullName, this.streeAddress, this.city, this.state, this.postalCode);
 }
 
 List<AddressModel> addressListItem = [
-  AddressModel('Kesav', '12/82, Mugapair west', 'Thirumangalam', 'Chennai','620003'),
-  AddressModel('Easwar', '12/82, Mugapair west', 'Thirumangalam', 'Chennai','620005'),
-  AddressModel('Ragav', '12/82, Mugapair west', 'Thirumangalam', 'Chennai','620002'),
-  AddressModel('Chandry', '12/82, Mugapair west', 'Thirumangalam', 'Chennai','620001'),
-  
+  AddressModel(
+      'Kesav', '12/82, Mugapair west', 'Thirumangalam', 'Chennai', '620003'),
+  AddressModel(
+      'Easwar', '12/82, Mugapair west', 'Thirumangalam', 'Chennai', '620005'),
+  AddressModel(
+      'Ragav', '12/82, Mugapair west', 'Thirumangalam', 'Chennai', '620002'),
+  AddressModel(
+      'Chandry', '12/82, Mugapair west', 'Thirumangalam', 'Chennai', '620001'),
 ];

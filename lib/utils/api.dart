@@ -7,4 +7,8 @@ class API{
 
   // otp api
 static String otpVerify = "https://ontimesalon.com/api/otp_verify.php?";
+
+
+  //salonList api
+static String salonList = "https://ontimesalon.com/api/Salon_list.php";
 }
